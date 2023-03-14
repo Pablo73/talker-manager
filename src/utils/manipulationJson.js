@@ -11,6 +11,17 @@ async function getManager() {
     }
 }
 
+async function getManagerId(id) {
+    try {
+        const allMAnager = await getManager();
+        const capturingId = allMAnager.filter((ele) => +ele.id === +id);
+        return capturingId;
+} catch (error) {
+        console.log(`Erro na leitura do arquivo ${error}`);
+    }
+}
+
 module.exports = {
     getManager,
+    getManagerId,
 };
