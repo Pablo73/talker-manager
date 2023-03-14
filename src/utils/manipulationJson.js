@@ -30,8 +30,24 @@ async function generatingToken() {
     }
 }
 
+async function postManager(event) {
+    const oldManagers = await getManager();
+    const newManagers = { id: oldManagers.length + 1, ...event };
+    const allManagers = JSON.stringify([
+        ...oldManagers, newManagers,
+    ], null, 2);
+
+    try {
+        await fs.writeFile(path.resolve(__dirname, '../talker.json'), allManagers);
+        return newManagers;
+} catch (error) {
+        console.log(`Erro na leitura do arquivo ${error}`);
+    }
+}
+
 module.exports = {
     getManager,
     getManagerId,
     generatingToken,
+    postManager,
 };

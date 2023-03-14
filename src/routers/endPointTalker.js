@@ -1,5 +1,11 @@
 const express = require('express');
-const { getManager, getManagerId } = require('../utils/manipulationJson');
+const { getManager, getManagerId, postManager } = require('../utils/manipulationJson');
+const { validationTokenExist,
+    validationName,
+    validationAge,
+    validationTalk,
+    validationRate,
+    validationWatchedAt } = require('../middlewares');
 
 const router = express.Router();
 
@@ -17,6 +23,12 @@ router.get('/talker/:id', async (req, res) => {
         });
     }
     return res.status(200).json(capturingId[0]);
+});
+
+router.post('/talker', validationTokenExist, validationName, async (req, res) => {
+    const { body } = req;
+    const newManagers = await postManager(body);
+    return res.status(201).json(newManagers);
 });
 
 module.exports = router;
