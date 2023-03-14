@@ -25,7 +25,14 @@ router.get('/talker/:id', async (req, res) => {
     return res.status(200).json(capturingId[0]);
 });
 
-router.post('/talker', validationTokenExist, validationName, async (req, res) => {
+router.post('/talker', 
+validationTokenExist,
+validationName,
+validationAge,
+validationTalk,
+validationRate,
+validationWatchedAt,
+async (req, res) => {
     const { body } = req;
     const newManagers = await postManager(body);
     return res.status(201).json(newManagers);
