@@ -21,7 +21,17 @@ async function getManagerId(id) {
     }
 }
 
+async function generatingToken() {
+    try {
+        const token = Math.random().toString(11).substr(2);
+        return token;
+} catch (error) {
+        console.log(`Erro na leitura do arquivo ${error}`);
+    }
+}
+
 module.exports = {
     getManager,
     getManagerId,
+    generatingToken,
 };
