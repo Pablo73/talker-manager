@@ -1,9 +1,11 @@
 const fs = require('fs').promises;
 const path = require('path');
 
+const json = '../talker.json';
+
 async function getManager() {
     try {
-        const allManager = await fs.readFile(path.resolve(__dirname, '../talker.json'));
+        const allManager = await fs.readFile(path.resolve(__dirname, json));
         const data = await JSON.parse(allManager);
         return data;
 } catch (error) {
@@ -38,7 +40,7 @@ async function postManager(event) {
     ], null, 2);
 
     try {
-        await fs.writeFile(path.resolve(__dirname, '../talker.json'), allManagers);
+        await fs.writeFile(path.resolve(__dirname, json), allManagers);
         return newManagers;
 } catch (error) {
         console.log(`Erro na leitura do arquivo ${error}`);
@@ -58,7 +60,7 @@ async function putManager(id, updateMovie) {
         const newJson = JSON.stringify(upDate, null, 2);
 
     try {
-        await fs.writeFile(path.resolve(__dirname, '../talker.json'), newJson);
+        await fs.writeFile(path.resolve(__dirname, json), newJson);
         return updateManager;
 } catch (error) {
         console.log(`Erro na leitura do arquivo ${error}`);
@@ -70,7 +72,7 @@ async function deleteManager(id) {
     const isManagerDelete = allMAnager.filter((movie) => +movie.id !== +id);
     const newJson = JSON.stringify(isManagerDelete, null, 2);
     try {
-        await fs.writeFile(path.resolve(__dirname, '../talker.json'), newJson);
+        await fs.writeFile(path.resolve(__dirname, json), newJson);
         return isManagerDelete;
 } catch (error) {
         console.log(`Erro na leitura do arquivo ${error}`);
@@ -96,6 +98,18 @@ async function searchTermManager(q, rate) {
     }
 }
 
+async function patchManager(id, value) {
+    const allManager = await getManager();
+    const patch = allManager.map((ele) => (+ele.id === +id ? value : ele));
+    const allManagers = JSON.stringify(patch, null, 2); 
+    console.log(allManagers);
+    try {
+        await fs.writeFile(path.resolve(__dirname, json), allManagers);
+} catch (error) {
+        console.log(`Erro na leitura do arquivo ${error}`);
+    }
+}
+
 module.exports = {
     getManager,
     getManagerId,
@@ -104,4 +118,5 @@ module.exports = {
     putManager,
     deleteManager,
     searchTermManager,
+    patchManager,
 };

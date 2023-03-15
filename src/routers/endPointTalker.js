@@ -1,12 +1,10 @@
 const express = require('express');
 const { getManager, getManagerId, postManager, 
     putManager, deleteManager, searchTermManager,
+    patchManager,
   } = require('../utils/manipulationJson');
-const { validationTokenExist,
-    validationName,
-    validationAge,
-    validationTalk,
-    validationRate,
+const { validationTokenExist, validationName, validationAge,
+    validationTalk, validationRate,
     validationWatchedAt } = require('../middlewares');
 
 const router = express.Router();
@@ -19,8 +17,7 @@ router.get('/talker', async (req, res) => {
 router.get('/talker/search', 
 validationTokenExist,
  async (req, res) => {
-    const { q } = req.query;
-    const { rate } = req.query;
+    const { q, rate } = req.query;
     const validation = rate < 1 || rate > 5 || !Number.isInteger(+rate);
     if (rate && validation) {
         return res.status(400).json({
@@ -40,6 +37,25 @@ router.get('/talker/:id', async (req, res) => {
         });
     }
     return res.status(200).json(capturingId[0]);
+});
+
+router.patch('/talker/rate/:id', validationTokenExist, async (req, res) => {
+    const { id } = req.params;
+    const { rate } = req.body;
+    if (rate === undefined) {
+        return res.status(400).json({ message: 'O campo "rate" é obrigatório' });
+    }
+    if (rate < 1 || rate > 5 || !Number.isInteger(rate)) {
+        return res.status(400).json({ message: 
+            'O campo "rate" deve ser um número inteiro entre 1 e 5' });
+     }
+    const allManager = await getManager();
+    const getId = allManager.find((ele) => +ele.id === +id);
+    
+    getId.talk.rate = rate; 
+    patchManager(id, getId);
+    
+    res.status(204).json();
 });
 
 router.post('/talker', 
