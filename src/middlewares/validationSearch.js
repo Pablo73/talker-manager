@@ -6,7 +6,7 @@ const validationRateSearch = async (req, res, next) => {
             message: 'O campo "rate" deve ser um número inteiro entre 1 e 5',
         });
     }
-    next();
+    return next();
 };
 
 const validationWatchedAtSearch = async (req, res, next) => {
@@ -18,7 +18,7 @@ const validationWatchedAtSearch = async (req, res, next) => {
         return res.status(400).json({
             message: 'O parâmetro "date" deve ter o formato "dd/mm/aaaa"' });
         }
-    next();
+    return next();
 };
 
 module.exports = { 
