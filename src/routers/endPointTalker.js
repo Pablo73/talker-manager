@@ -1,6 +1,6 @@
 const express = require('express');
 const { getManager, getManagerId, postManager, 
-    putManager, deleteManager } = require('../utils/manipulationJson');
+    putManager, deleteManager, searchManager } = require('../utils/manipulationJson');
 const { validationTokenExist,
     validationName,
     validationAge,
@@ -13,6 +13,12 @@ const router = express.Router();
 router.get('/talker', async (req, res) => {
     const allManagers = await getManager();
     return res.status(200).json(allManagers);
+});
+
+router.get('/talker/search', validationTokenExist, async (req, res) => {
+    const { q } = req.query;
+    const value = await searchManager(q);
+    return res.status(200).json(value);
 });
 
 router.get('/talker/:id', async (req, res) => {

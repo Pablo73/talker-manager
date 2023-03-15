@@ -77,6 +77,16 @@ async function deleteManager(id) {
     }
 }
 
+async function searchManager(value) {
+    const allManager = await getManager();
+    const valueFilter = allManager.filter((ele) => ele.name.indexOf(value) !== -1);
+    try {
+        return valueFilter;
+} catch (error) {
+        console.log(`Erro na leitura do arquivo ${error}`);
+    }
+}
+
 module.exports = {
     getManager,
     getManagerId,
@@ -84,4 +94,5 @@ module.exports = {
     postManager,
     putManager,
     deleteManager,
+    searchManager,
 };
