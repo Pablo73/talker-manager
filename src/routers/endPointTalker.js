@@ -7,6 +7,8 @@ const { validationTokenExist, validationName, validationAge,
     validationTalk, validationRate,
     validationWatchedAt } = require('../middlewares');
 
+const { validationRateSearch, validationWatchedAtSearch } = require('../middlewares');
+
 const router = express.Router();
 
 router.get('/talker', async (req, res) => {
@@ -16,15 +18,17 @@ router.get('/talker', async (req, res) => {
 
 router.get('/talker/search', 
 validationTokenExist,
+validationRateSearch,
+validationWatchedAtSearch,
  async (req, res) => {
-    const { q, rate } = req.query;
-    const validation = rate < 1 || rate > 5 || !Number.isInteger(+rate);
-    if (rate && validation) {
-        return res.status(400).json({
-            message: 'O campo "rate" deve ser um número inteiro entre 1 e 5',
-        });
-    }
-        const value = await searchTermManager(q, rate);
+    const { q, rate, date } = req.query;
+    // const validation = rate < 1 || rate > 5 || !Number.isInteger(+rate);
+    // if (rate && validation) {
+    //     return res.status(400).json({
+    //         message: 'O campo "rate" deve ser um número inteiro entre 1 e 5',
+    //     });
+    // }
+        const value = await searchTermManager(q, rate, date);
         return res.status(200).json(value);
 });
 

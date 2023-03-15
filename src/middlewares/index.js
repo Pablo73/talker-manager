@@ -6,6 +6,8 @@ const { validationTokenExist,
     validationWatchedAt,
     validationRate } = require('./validationNewManager');
 
+const { validationRateSearch, validationWatchedAtSearch } = require('./validationSearch');
+
 module.exports = {
     validationEmail,
     validationPassword,
@@ -15,4 +17,7 @@ module.exports = {
         validationTalk,
         validationWatchedAt,
         validationRate,
+        validationRateSearch,
+        validationWatchedAtSearch,
+
 };

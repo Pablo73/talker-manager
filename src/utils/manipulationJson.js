@@ -9,7 +9,7 @@ async function getManager() {
         const data = await JSON.parse(allManager);
         return data;
 } catch (error) {
-        console.log(`Erro na leitura do arquivo ${error}`);
+        console.error(`Erro na leitura do arquivo ${error}`);
     }
 }
 
@@ -79,30 +79,19 @@ async function deleteManager(id) {
     }
 }
 
-async function searchTermManager(q, rate) {
+async function searchTermManager(q, rate, date) {
     const allManager = await getManager();
-    try {
-    if (q === undefined) {
-        const valueFilterRate = allManager.filter((ele) => +ele.talk.rate === +rate);
-        return valueFilterRate;
-    }
-    if (rate === undefined) {
-        const valueFilterName = allManager.filter((ele) => ele.name.indexOf(q) !== -1);
-        return valueFilterName;
-    } 
-        const valueFilterRate = allManager.filter((ele) => +ele.talk.rate === +rate);
-        const valueFilterName = valueFilterRate.filter((ele) => ele.name.indexOf(q) !== -1);
-        return valueFilterName;
-} catch (error) {
-        console.log(`Erro na leitura do arquivo ${error}`);
-    }
+   const filterSearch = allManager
+   .filter((eleQ) => (q ? eleQ.name.indexOf(q) !== -1 : eleQ))
+   .filter((eleRate) => (rate ? +eleRate.talk.rate === +rate : eleRate))
+   .filter((eleDate) => (date ? eleDate.talk.watchedAt === date : eleDate));
+   return filterSearch;
 }
 
 async function patchManager(id, value) {
     const allManager = await getManager();
     const patch = allManager.map((ele) => (+ele.id === +id ? value : ele));
     const allManagers = JSON.stringify(patch, null, 2); 
-    console.log(allManagers);
     try {
         await fs.writeFile(path.resolve(__dirname, json), allManagers);
 } catch (error) {
