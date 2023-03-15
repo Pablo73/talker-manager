@@ -22,12 +22,12 @@ async function getManagerId(id) {
 }
 
 async function generatingToken() {
-    try {
-        const token = Math.random().toString(11).substr(2);
-        return token;
-} catch (error) {
-        console.log(`Erro na leitura do arquivo ${error}`);
-    }
+        let stringAleatoria = '';
+        const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+        for (let i = 0; i < 16; i += 1) {
+            stringAleatoria += caracteres.charAt(Math.floor(Math.random() * caracteres.length));
+        }
+        return stringAleatoria;
 }
 
 async function postManager(event) {

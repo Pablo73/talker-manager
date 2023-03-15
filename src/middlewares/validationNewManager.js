@@ -1,6 +1,6 @@
 const validationTokenExist = async (req, res, next) => {
     const { authorization } = req.headers;
-    if (authorization === undefined) {
+    if (!authorization) {
         return res.status(401).json({ message: 'Token não encontrado' });
     }
     if (authorization.length !== 16) {
@@ -18,7 +18,7 @@ const validationName = async (req, res, next) => {
     if (name.length < 3) {
     return res.status(400).json({ message: 'O "name" deve ter pelo menos 3 caracteres' });
     }
-return next();
+next();
 };
 
 const validationAge = async (req, res, next) => {
@@ -31,7 +31,7 @@ const validationAge = async (req, res, next) => {
         return res.status(400).json({ message: 
         'O campo "age" deve ser um número inteiro igual ou maior que 18' });
     }
-    return next();
+    next();
     };
 
 const validationTalk = async (req, res, next) => {
@@ -40,7 +40,7 @@ const validationTalk = async (req, res, next) => {
     if (talk === undefined) {
         return res.status(400).json({ message: 'O campo "talk" é obrigatório' });
     } 
-    return next();
+    next();
     };
 
 const validationWatchedAt = async (req, res, next) => {
@@ -55,7 +55,7 @@ const validationWatchedAt = async (req, res, next) => {
         return res.status(400).json({ message: 
             'O campo "watchedAt" deve ter o formato "dd/mm/aaaa"' });
      }
-    return next();
+    next();
     };
 
     const validationRate = async (req, res, next) => {
@@ -67,7 +67,7 @@ const validationWatchedAt = async (req, res, next) => {
             return res.status(400).json({ message: 
                 'O campo "rate" deve ser um número inteiro entre 1 e 5' });
          }
-        return next();
+        next();
         };
 
     module.exports = { 
