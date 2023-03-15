@@ -77,11 +77,20 @@ async function deleteManager(id) {
     }
 }
 
-async function searchManager(value) {
+async function searchTermManager(q, rate) {
     const allManager = await getManager();
-    const valueFilter = allManager.filter((ele) => ele.name.indexOf(value) !== -1);
     try {
-        return valueFilter;
+    if (q === undefined) {
+        const valueFilterRate = allManager.filter((ele) => +ele.talk.rate === +rate);
+        return valueFilterRate;
+    }
+    if (rate === undefined) {
+        const valueFilterName = allManager.filter((ele) => ele.name.indexOf(q) !== -1);
+        return valueFilterName;
+    } 
+        const valueFilterRate = allManager.filter((ele) => +ele.talk.rate === +rate);
+        const valueFilterName = valueFilterRate.filter((ele) => ele.name.indexOf(q) !== -1);
+        return valueFilterName;
 } catch (error) {
         console.log(`Erro na leitura do arquivo ${error}`);
     }
@@ -94,5 +103,5 @@ module.exports = {
     postManager,
     putManager,
     deleteManager,
-    searchManager,
+    searchTermManager,
 };
