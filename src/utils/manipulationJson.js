@@ -45,9 +45,30 @@ async function postManager(event) {
     }
 }
 
+async function putManager(id, updateMovie) {
+    const allMAnager = await getManager();
+        const updateManager = { id, ...updateMovie };
+
+        const upDate = allMAnager.reduce((add, curr) => {
+            if (+curr.id === +updateManager.id) {
+                return [...add, updateManager];
+            }
+            return [...add, curr];
+        }, []);
+        const newJson = JSON.stringify(upDate, null, 2);
+
+    try {
+        await fs.writeFile(path.resolve(__dirname, '../talker.json'), newJson);
+        return updateManager;
+} catch (error) {
+        console.log(`Erro na leitura do arquivo ${error}`);
+    }
+}
+
 module.exports = {
     getManager,
     getManagerId,
     generatingToken,
     postManager,
+    putManager,
 };

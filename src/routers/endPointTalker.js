@@ -1,5 +1,5 @@
 const express = require('express');
-const { getManager, getManagerId, postManager } = require('../utils/manipulationJson');
+const { getManager, getManagerId, postManager, putManager } = require('../utils/manipulationJson');
 const { validationTokenExist,
     validationName,
     validationAge,
@@ -36,6 +36,30 @@ async (req, res) => {
     const { body } = req;
     const newManagers = await postManager(body);
     return res.status(201).json(newManagers);
+});
+
+router.put('/talker/:id', 
+validationTokenExist,
+validationName,
+validationAge,
+validationTalk,
+validationRate,
+validationWatchedAt,
+async (req, res) => {
+    const { id } = req.params;
+    const { body } = req;
+    const allMAnager = await getManager();
+    const thereIs = allMAnager.some((ele) => +ele.id === +id);
+
+    if (thereIs) {
+        const upDateMovie = await putManager(+id, body);
+    
+        res.status(200).json(upDateMovie);
+    } else {
+        res.status(404).json({
+            message: 'Pessoa palestrante não encontrada',
+        });
+    }
 });
 
 module.exports = router;
