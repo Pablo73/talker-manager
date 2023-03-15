@@ -65,10 +65,23 @@ async function putManager(id, updateMovie) {
     }
 }
 
+async function deleteManager(id) {
+    const allMAnager = await getManager();
+    const isManagerDelete = allMAnager.filter((movie) => +movie.id !== +id);
+    const newJson = JSON.stringify(isManagerDelete, null, 2);
+    try {
+        await fs.writeFile(path.resolve(__dirname, '../talker.json'), newJson);
+        return isManagerDelete;
+} catch (error) {
+        console.log(`Erro na leitura do arquivo ${error}`);
+    }
+}
+
 module.exports = {
     getManager,
     getManagerId,
     generatingToken,
     postManager,
     putManager,
+    deleteManager,
 };

@@ -1,5 +1,6 @@
 const express = require('express');
-const { getManager, getManagerId, postManager, putManager } = require('../utils/manipulationJson');
+const { getManager, getManagerId, postManager, 
+    putManager, deleteManager } = require('../utils/manipulationJson');
 const { validationTokenExist,
     validationName,
     validationAge,
@@ -52,9 +53,24 @@ async (req, res) => {
     const thereIs = allMAnager.some((ele) => +ele.id === +id);
 
     if (thereIs) {
-        const upDateMovie = await putManager(+id, body);
+        const upDateManager = await putManager(+id, body);
     
-        res.status(200).json(upDateMovie);
+        res.status(200).json(upDateManager);
+    } else {
+        res.status(404).json({
+            message: 'Pessoa palestrante não encontrada',
+        });
+    }
+});
+
+router.delete('/talker/:id', validationTokenExist, async (req, res) => {
+    const { id } = req.params;
+    const allMAnager = await getManager();
+    const thereIs = allMAnager.some((ele) => +ele.id === +id);
+
+    if (thereIs) {
+        await deleteManager(+id);
+        res.status(204).end();
     } else {
         res.status(404).json({
             message: 'Pessoa palestrante não encontrada',
